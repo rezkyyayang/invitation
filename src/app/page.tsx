@@ -35,11 +35,11 @@ function HomeContent() {
           <p className="text-lg tracking-widest text-black">28.03.2026</p>
 
           {/* Recipient name above the button */}
-          <p className="text-lg md:text-xl text-black">Dear, <br/> {recipientName}</p>
+          <p className="text-lg md:text-xl text-black ">Dear, <br/> {recipientName}</p>
 
           {/* Open Invitation button */}
           <button
-            className="mt-3 rounded-full bg-emerald-800 px-6 py-3 text-base font-semibold text-white shadow-md transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 flex items-center gap-2"
+            className="mt-3 rounded-full bg-emerald-800 px-6 py-3 text-base font-semibold text-white font-[family-name:var(--font-playpen-sans)] shadow-md transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 flex items-center gap-2"
             onClick={() => {
               const to = searchParams.get("to");
               const qs = to ? `?to=${encodeURIComponent(to)}` : "";

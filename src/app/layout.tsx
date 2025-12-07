@@ -11,10 +11,11 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-import { Poppins, Dynalight } from "next/font/google";
+import { Poppins, Dynalight, Playpen_Sans } from "next/font/google";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"] });
 const dynalight = Dynalight({ subsets: ["latin"], weight: "400" });
+const playpenSans = Playpen_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], variable: "--font-playpen-sans" });
 
 export const metadata: Metadata = {
   title: "S&R Wedding Invitation",
@@ -43,7 +44,7 @@ export default function RootLayout({
     <html lang="en">
       <head>{/* Head is managed by metadata/viewport exports */}</head>
       <body
-  className={`${geistSans.variable} ${geistMono.variable} antialiased ${poppins.className} ${dynalight.className}`}
+  className={`${geistSans.variable} ${geistMono.variable} antialiased ${poppins.className} ${dynalight.className} ${playpenSans.variable}`}
       >
         {/* Safe-area wrapper for iOS/Android notches */}
         <div className="min-h-dvh portrait:px-safe portrait:py-safe landscape:px-4 landscape:py-2">

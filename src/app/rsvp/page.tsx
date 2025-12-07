@@ -92,7 +92,7 @@ export default function RsvpPage() {
   };
 
   return (
-    <div className="min-h-dvh w-full bg-[#ececec]">
+    <div className="min-h-dvh w-full bg-[#ececec] font-[family-name:var(--font-playpen-sans)]">
       {/* Content layer: two columns on desktop with comfortable vertical spacing */}
   <main className="mx-auto grid min-h-dvh max-w-6xl grid-cols-1 gap-6 px-safe py-8 md:grid-cols-2 md:py-12 px-6 md:px-10">
         {/* Left column: RSVP form */}
