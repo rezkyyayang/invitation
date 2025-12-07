@@ -21,11 +21,9 @@ function HomeContent() {
 
       {/* Content layer */}
       <main className="relative flex min-h-dvh items-center justify-center px-safe py-safe">
-        <section className="flex w-full max-w-[420px] flex-col items-center gap-4 text-center md:max-w-none md:w-auto">
+        <section className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center md:max-w-none md:w-auto">
           {/* Heading S&R with Dynalight font */}
             <h1 className="text-5xl md:text-6xl text-black">S&amp;R</h1>
-
-          
 
           {/* Bride/Groom Illustration */}
           <img
@@ -34,14 +32,14 @@ function HomeContent() {
             className="h-auto w-30 md:w-40"
           />
           {/* Optional date under image (commented out) */}
-          <p className="mt-2 text-lg tracking-widest text-black">28.03.2026</p>
+          <p className="text-lg tracking-widest text-black">28.03.2026</p>
 
           {/* Recipient name above the button */}
-          <p className="mt-1 text-lg md:text-xl text-black">to: <br/> {recipientName}</p>
+          <p className="text-lg md:text-xl text-black">to: <br/> {recipientName}</p>
 
           {/* Open Invitation button */}
           <button
-            className="mt-2 rounded-full bg-emerald-800 px-6 py-3 text-base font-semibold text-white shadow-md transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+            className="mt-3 rounded-full bg-emerald-800 px-6 py-3 text-base font-semibold text-white shadow-md transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600"
             onClick={() => {
               const to = searchParams.get("to");
               const qs = to ? `?to=${encodeURIComponent(to)}` : "";
