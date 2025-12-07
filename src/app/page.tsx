@@ -23,7 +23,7 @@ function HomeContent() {
       <main className="relative flex min-h-dvh items-center justify-center px-safe py-safe">
         <section className="flex w-full max-w-[420px] flex-col items-center gap-4 text-center md:max-w-none md:w-auto">
           {/* Heading S&R with Dynalight font */}
-          <h1 className="text-5xl md:text-6xl">S&amp;R</h1>
+            <h1 className="text-5xl md:text-6xl text-black">S&amp;R</h1>
 
           
 
@@ -34,10 +34,10 @@ function HomeContent() {
             className="h-auto w-30 md:w-40"
           />
           {/* Optional date under image (commented out) */}
-          <p className="mt-2 text-lg tracking-widest">28.03.2026</p>
+          <p className="mt-2 text-lg tracking-widest text-black">28.03.2026</p>
 
           {/* Recipient name above the button */}
-          <p className="mt-1 text-lg md:text-xl">to: {recipientName}</p>
+          <p className="mt-1 text-lg md:text-xl text-black">to: <br/> {recipientName}</p>
 
           {/* Open Invitation button */}
           <button
