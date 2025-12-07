@@ -1,8 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabaseClient";
 
 export default function RsvpPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [attendance, setAttendance] = useState<"will" | "unable" | "">("");
   const [message, setMessage] = useState("");
@@ -12,10 +14,49 @@ export default function RsvpPage() {
   type Item = { id: number; name: string; status: "will" | "unable"; message: string; date: string };
   const [items, setItems] = useState<Item[]>([]);
   const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const pageSize = 25;
   const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
   const startIdx = (page - 1) * pageSize;
   const visibleItems = items.slice(startIdx, startIdx + pageSize);
+
+  // Fetch RSVP data from Supabase
+  const fetchRsvpData = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .schema("rezkyyayang")
+        .from("rsvp")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching RSVP data:", error);
+        return;
+      }
+
+      if (data) {
+        // Transform Supabase data to match Item type
+        const transformedItems: Item[] = data.map((row: any) => ({
+          id: row.id,
+          name: row.name,
+          status: row.rsvp ? "will" : "unable",
+          message: row.message || "",
+          date: row.created_at ? new Date(row.created_at).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        }));
+        setItems(transformedItems);
+      }
+    } catch (err) {
+      console.error("Error fetching RSVP data:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchRsvpData();
+  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,17 +81,14 @@ export default function RsvpPage() {
       return;
     }
 
-    const newItem: Item = {
-      id: Date.now(),
-      name,
-      status: attendance as "will" | "unable",
-      message,
-      date: new Date().toISOString().slice(0, 10),
-    };
-    setItems((prev) => [newItem, ...prev]);
+    // Refresh data after successful submission
+    await fetchRsvpData();
+    
+    // Reset form
     setName("");
     setAttendance("");
     setMessage("");
+    alert("RSVP submitted successfully!");
   };
 
   return (
@@ -58,7 +96,31 @@ export default function RsvpPage() {
       {/* Content layer: two columns on desktop with comfortable vertical spacing */}
   <main className="mx-auto grid min-h-dvh max-w-6xl grid-cols-1 gap-6 px-safe py-8 md:grid-cols-2 md:py-12 px-6 md:px-10">
         {/* Left column: RSVP form */}
-  <section className="mx-4 rounded-2xl border-4 border-emerald-900 bg-white p-6 shadow-xl md:mx-0 md:p-8">
+  <section className="mx-4 rounded-2xl border-4 border-emerald-900 bg-white p-6 shadow-xl md:mx-0 md:p-8 relative">
+          {/* Navigation buttons in top right corner */}
+          <div className="absolute top-4 right-4 flex gap-2">
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-900 text-white hover:bg-emerald-800 transition-colors shadow-md"
+              title="Home"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => window.open("https://sukmarezky.my.canva.site/digital-invitation", "_blank")}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-900 text-white hover:bg-emerald-800 transition-colors shadow-md"
+              title="Open Invitation"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 9v.906a2.25 2.25 0 0 1-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 0 0 1.183 1.981l6.478 3.488m8.839 2.51-4.66-2.51m0 0-1.023-.55a2.25 2.25 0 0 0-2.134 0l-1.022.55m0 0-4.661 2.51m16.5 1.615a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V8.844a2.25 2.25 0 0 1 1.183-1.981l7.5-4.039a2.25 2.25 0 0 1 2.134 0l7.5 4.039a2.25 2.25 0 0 1 1.183 1.98V19.5Z" />
+              </svg>
+            </button>
+          </div>
+
           <h1 className="mb-4 text-3xl font-bold text-emerald-900">RSVP</h1>
 
           <form className="flex flex-col gap-5" onSubmit={onSubmit}>
@@ -78,7 +140,7 @@ export default function RsvpPage() {
             {/* RSVP choice */}
             <div>
               <label className="mb-2 block font-semibold text-emerald-900">
-                We kindly request your RSVP
+                We kindly request your RSVP on 28 March 2026
               </label>
               <div className="flex flex-col gap-3">
                 <button
@@ -153,7 +215,9 @@ export default function RsvpPage() {
 
           <h3 className="mt-6 text-xl font-bold text-emerald-900">RSVP Feed</h3>
           <div className="mt-3 max-h-[50vh] overflow-y-auto rounded-xl border border-emerald-900/40 bg-white">
-            {visibleItems.length === 0 ? (
+            {isLoading ? (
+              <div className="p-4 text-sm text-emerald-900/80 text-center">Loading...</div>
+            ) : visibleItems.length === 0 ? (
               <div className="p-4 text-sm text-emerald-900/80">No RSVP yet.</div>
             ) : (
               <ul className="divide-y divide-emerald-900/20">
