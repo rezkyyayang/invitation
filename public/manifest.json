@@ -1,0 +1,11 @@
+{
+  "name": "Mobile Portrait App",
+  "short_name": "PortraitApp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "any", "type": "image/x-icon" }
+  ]
+}
