@@ -35,7 +35,7 @@ function HomeContent() {
           <p className="text-lg tracking-widest text-black">28.03.2026</p>
 
           {/* Recipient name above the button */}
-          <p className="text-lg md:text-xl text-black ">Dear, <br/> {recipientName}</p>
+          <p className="text-lg md:text-xl text-black ">Dear, <br/><span className="text-xl md:text-2xl font-semibold"> {recipientName}</span></p>
 
           {/* Open Invitation button */}
           <button

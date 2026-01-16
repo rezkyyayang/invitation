@@ -79,5 +79,14 @@ body {
   }
 }
 
+/* Override untuk halaman tertentu yang tidak perlu rotasi di desktop */
+@media (min-width: 768px) {
+  .home-bg--no-rotate .home-bg__image {
+    height: 100%;
+    width: auto;
+    transform: translate(-50%, -50%);
+  }
+}
+
 /* Utility class to apply Apricots font */
 /* Removed Apricots custom font utility; now using Great Vibes via next/font */
