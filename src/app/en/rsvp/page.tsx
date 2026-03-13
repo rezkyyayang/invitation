@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "../../../lib/supabaseClient";
 
 export default function RsvpPage() {
   const router = useRouter();
@@ -126,7 +126,7 @@ export default function RsvpPage() {
           <form className="flex flex-col gap-5" onSubmit={onSubmit}>
             {/* Your Name */}
             <div>
-              <label className="mb-2 block font-semibold text-emerald-900">Nama</label>
+              <label className="mb-2 block font-semibold text-emerald-900">Your Name</label>
               <input
                 type="text"
                 value={name}
@@ -140,7 +140,7 @@ export default function RsvpPage() {
             {/* RSVP choice */}
             <div>
               <label className="mb-2 block font-semibold text-emerald-900">
-                Kami mohon konfirmasi kehadiran Anda pada 28 Maret 2026
+                We kindly request your RSVP on 28 March 2026
               </label>
               <div className="flex flex-col gap-3">
                 <button
@@ -152,7 +152,7 @@ export default function RsvpPage() {
                       : "bg-gray-200 text-emerald-900 hover:bg-gray-300"
                   }`}
                 >
-                  ✅ Akan Hadir
+                  ✅ Will Attend
                 </button>
                 <button
                   type="button"
@@ -163,7 +163,7 @@ export default function RsvpPage() {
                       : "bg-gray-200 text-emerald-900 hover:bg-gray-300"
                   }`}
                 >
-                  ❌ Tidak Bisa Hadir
+                  ❌ Unable to Attend
                 </button>
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function RsvpPage() {
             {/* Message */}
             <div>
               <label className="mb-2 block font-semibold text-emerald-900">
-                ✉️ Bagikan pesan untuk Kami!
+                ✉️ Share some love for Us!
               </label>
               <input
                 type="text"
@@ -197,28 +197,28 @@ export default function RsvpPage() {
 
         {/* Right column: stats and RSVP feed */}
   <section className="mx-4 rounded-2xl border-4 border-emerald-900 bg-white p-6 shadow-xl md:mx-0 md:p-8">
-          <h2 className="mb-4 text-2xl font-bold text-emerald-900">Statistik Kehadiran</h2>
+          <h2 className="mb-4 text-2xl font-bold text-emerald-900">Attendance Stats</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="rounded-xl border border-emerald-900/50 bg-emerald-50 p-4 text-center">
-              <div className="text-sm font-semibold text-emerald-900">✅ Akan Hadir</div>
+              <div className="text-sm font-semibold text-emerald-900">✅ Will Attend</div>
               <div className="mt-1 text-3xl font-bold text-emerald-900">
                 {items.filter((i) => i.status === "will").length}
               </div>
             </div>
             <div className="rounded-xl border border-emerald-900/50 bg-emerald-50 p-4 text-center">
-              <div className="text-sm font-semibold text-emerald-900">❌ Tidak Bisa Hadir</div>
+              <div className="text-sm font-semibold text-emerald-900">❌ Unable to Attend</div>
               <div className="mt-1 text-3xl font-bold text-emerald-900">
                 {items.filter((i) => i.status === "unable").length}
               </div>
             </div>
           </div>
 
-          <h3 className="mt-6 text-xl font-bold text-emerald-900">Feed RSVP</h3>
+          <h3 className="mt-6 text-xl font-bold text-emerald-900">RSVP Feed</h3>
           <div className="mt-3 max-h-[50vh] overflow-y-auto rounded-xl border border-emerald-900/40 bg-white">
             {isLoading ? (
-              <div className="p-4 text-sm text-emerald-900/80 text-center">Memuat...</div>
+              <div className="p-4 text-sm text-emerald-900/80 text-center">Loading...</div>
             ) : visibleItems.length === 0 ? (
-              <div className="p-4 text-sm text-emerald-900/80">Belum ada RSVP.</div>
+              <div className="p-4 text-sm text-emerald-900/80">No RSVP yet.</div>
             ) : (
               <ul className="divide-y divide-emerald-900/20">
                 {visibleItems.map((i) => (
@@ -228,7 +228,7 @@ export default function RsvpPage() {
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
                         i.status === "will" ? "bg-emerald-900 text-white" : "bg-gray-200 text-emerald-900"
                       }`}>
-                        {i.status === "will" ? "✅ Akan Hadir" : "❌ Tidak Bisa Hadir"}
+                        {i.status === "will" ? "✅ Will Attend" : "❌ Unable to Attend"}
                       </span>
                     </div>
                     <div className="mt-1 text-sm text-emerald-900/80">{i.message || "-"}</div>
@@ -249,7 +249,7 @@ export default function RsvpPage() {
             >
               Prev
             </button>
-            <div className="text-sm text-emerald-900">Halaman {page} / {totalPages}</div>
+            <div className="text-sm text-emerald-900">Page {page} / {totalPages}</div>
             <button
               type="button"
               className="rounded-full bg-emerald-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
