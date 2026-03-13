@@ -24,11 +24,11 @@ const tangerine = Tangerine({ subsets: ["latin"], weight: ["400", "700"], variab
 export const metadata: Metadata = {
   metadataBase: new URL("https://sukma.rezkyyayang.my.id"),
   title: "S&R Wedding Invitation",
-  description: "Wedding invitation of Sukma and Rezky on 28th March 2026",
+  description: "Wedding of Sukma and Rezky",
   manifest: "/manifest.json",
   openGraph: {
     title: "S&R Wedding Invitation",
-    description: "Wedding invitation of Sukma and Rezky on 28th March 2026",
+    description: "Wedding of Sukma and Rezky",
     images: [
       {
         url: "/home-idn3.jpg",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "S&R Wedding Invitation",
-    description: "Wedding invitation of Sukma and Rezky on 28th March 2026",
+    description: "Wedding of Sukma and Rezky",
     images: ["/home-idn3.jpg"],
   },
 };
