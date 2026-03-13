@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     description: "Wedding invitation of Sukma and Rezky on 28th March 2026",
     images: [
       {
-        url: "/home-idn3.png",
+        url: "/home-idn3.jpg",
         width: 1200,
         height: 630,
         alt: "S&R Wedding Invitation",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "S&R Wedding Invitation",
     description: "Wedding invitation of Sukma and Rezky on 28th March 2026",
-    images: ["/home-idn3.png"],
+    images: ["/home-idn3.jpg"],
   },
 };
 
