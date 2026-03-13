@@ -8,6 +8,20 @@ function HomeContent() {
   // Get recipient name from ?to= query, default to 'Tamu Undangan'. Replace '+' with space for common URL patterns.
   const toRaw = searchParams.get("to") || "Tamu Undangan";
   const recipientName = toRaw.replace(/\+/g, " ");
+  const recipientNameWithBreak = (() => {
+    const lowerName = recipientName.toLowerCase();
+    const danIndex = lowerName.indexOf(" dan ");
+    if (danIndex === -1) {
+      return recipientName;
+    }
+    return (
+      <>
+        {recipientName.slice(0, danIndex).trimEnd()}
+        <br />
+        {recipientName.slice(danIndex + 1)}
+      </>
+    );
+  })();
   return (
     <div className="min-h-dvh w-full">
       {/* Fullscreen background: portrait on mobile, no rotation on desktop */}
@@ -24,7 +38,7 @@ function HomeContent() {
         <section className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center translate-y-10 md:max-w-none md:w-auto">
           
           {/* Recipient name above the button */}
-          <p className="text-sm md:text-base text-black font-[family-name:var(--font-playpen-sans)]">Yth. Bapak/Ibu/Saudara/i, <br/><span className="text-lg md:text-xl font-semibold">{recipientName}</span></p>
+          <p className="text-sm md:text-base text-black font-[family-name:var(--font-playpen-sans)]">Yth. Bapak/Ibu/Saudara/i, <br/><span className="text-lg md:text-xl font-semibold">{recipientNameWithBreak}</span></p>
 
           {/* Open Invitation button */}
           <button
