@@ -22,6 +22,7 @@ const tangerine = Tangerine({ subsets: ["latin"], weight: ["400", "700"], variab
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sukma.rezkyyayang.my.id"),
   title: "S&R Wedding Invitation",
   description: "Wedding invitation of Sukma and Rezky on 28th March 2026",
   manifest: "/manifest.json",
