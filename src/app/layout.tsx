@@ -25,6 +25,24 @@ export const metadata: Metadata = {
   title: "S&R Wedding Invitation",
   description: "Wedding invitation for Sukma and Rezky on 28th March 2026",
   manifest: "/manifest.json",
+  openGraph: {
+    title: "S&R Wedding Invitation",
+    description: "Wedding invitation for Sukma and Rezky on 28th March 2026",
+    images: [
+      {
+        url: "/home-idn2.png",
+        width: 1200,
+        height: 630,
+        alt: "S&R Wedding Invitation",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "S&R Wedding Invitation",
+    description: "Wedding invitation for Sukma and Rezky on 28th March 2026",
+    images: ["/home-idn2.png"],
+  },
 };
 
 // Move viewport + themeColor to the dedicated Viewport export as per Next.js recommendations

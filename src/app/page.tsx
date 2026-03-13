@@ -38,7 +38,7 @@ function HomeContent() {
         <section className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center translate-y-10 md:max-w-none md:w-auto">
           
           {/* Recipient name above the button */}
-          <p className="text-sm md:text-base text-black font-[family-name:var(--font-playpen-sans)]">Yth. Bapak/Ibu/Saudara/i, <br/><span className="text-lg md:text-xl font-semibold">{recipientNameWithBreak}</span></p>
+          <p className="text-sm md:text-base text-black font-[family-name:var(--font-playpen-sans)]">Yth. Bapak/Ibu/Saudara/i, <br/><span className="text-sm md:text-sm font-semibold">{recipientNameWithBreak}</span></p>
 
           {/* Open Invitation button */}
           <button
