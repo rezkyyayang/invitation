@@ -8,27 +8,41 @@ function HomeContent() {
   // Get recipient name from ?to= query, default to 'Tamu Undangan'. Replace '+' with space for common URL patterns.
   const toRaw = searchParams.get("to") || "Tamu Undangan";
   const recipientName = toRaw.replace(/\+/g, " ");
+  const recipientNameWithBreak = (() => {
+    const lowerName = recipientName.toLowerCase();
+    const danIndex = lowerName.indexOf(" dan ");
+    if (danIndex === -1) {
+      return recipientName;
+    }
+    return (
+      <>
+        {recipientName.slice(0, danIndex).trimEnd()}
+        <br />
+        {recipientName.slice(danIndex + 1)}
+      </>
+    );
+  })();
   return (
     <div className="min-h-dvh w-full">
       {/* Fullscreen background: portrait on mobile, no rotation on desktop */}
       <div className="home-bg home-bg--no-rotate">
         <img
-          src="/home-idn.png"
+          src="/home-idn2.png"
           alt="Home background"
           className="home-bg__image"
         />
       </div>
 
       {/* Content layer */}
-      <main className="relative flex min-h-dvh items-end justify-center px-safe py-safe">
-        <section className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center mb-20 md:mb-24 md:max-w-none md:w-auto">
+      <main className="relative flex min-h-dvh items-center justify-center px-safe py-safe">
+        <section className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center translate-y-10 md:max-w-none md:w-auto">
           
           {/* Recipient name above the button */}
-          <p className="text-lg md:text-xl text-black ">Yth. Bapak/Ibu/Saudara/i, <br/><span className="text-2xl md:text-3xl font-semibold">{recipientName}</span></p>
+          <p className="text-sm md:text-base text-black font-[family-name:var(--font-playpen-sans)]">Yth. Bapak/Ibu/Saudara/i, <br/><span className="text-sm md:text-sm font-semibold">{recipientNameWithBreak}</span></p>
 
           {/* Open Invitation button */}
           <button
-            className="mt-3 rounded-full bg-emerald-800 px-6 py-3 text-base font-semibold text-white font-[family-name:var(--font-playpen-sans)] shadow-md transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 flex items-center gap-2"
+            className="mt-3 rounded-full bg-emerald-800 px-5 py-2.5 text-sm font-semibold text-white font-[family-name:var(--font-playpen-sans)] shadow-md transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 flex items-center gap-2"
             onClick={() => {
               const to = searchParams.get("to");
               const qs = to ? `?to=${encodeURIComponent(to)}` : "";
