@@ -6,12 +6,12 @@ import { supabase } from "../../lib/supabaseClient";
 export default function RsvpPage() {
   const router = useRouter();
   const [name, setName] = useState("");
-  const [attendance, setAttendance] = useState<"will" | "unable" | "">("");
+  const [attendance, setAttendance] = useState<"will" | "unable" | "maybe" | "">("");
   const [message, setMessage] = useState("");
   // Date field is hidden; we rely on Supabase created_at. For local feed display, we'll use the current date at submission time.
 
   // Mocked RSVP list state (replace with backend later)
-  type Item = { id: number; name: string; status: "will" | "unable"; message: string; date: string };
+  type Item = { id: number; name: string; status: "will" | "unable" | "maybe"; message: string; date: string };
   const [items, setItems] = useState<Item[]>([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +40,7 @@ export default function RsvpPage() {
         const transformedItems: Item[] = data.map((row: any) => ({
           id: row.id,
           name: row.name,
-          status: row.rsvp ? "will" : "unable",
+          status: row.rsvp === null ? "maybe" : row.rsvp ? "will" : "unable",
           message: row.message || "",
           date: row.created_at ? new Date(row.created_at).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
         }));
@@ -64,7 +64,7 @@ export default function RsvpPage() {
     if (!name || !attendance) return;
 
     // Map attendance to boolean rsvp: will=true, unable=false
-    const rsvpBool = attendance === "will";
+    const rsvpBool = attendance === "maybe" ? null : attendance === "will";
 
     // Insert into Supabase
     const { error } = await supabase
@@ -94,9 +94,9 @@ export default function RsvpPage() {
   return (
     <div className="min-h-dvh w-full bg-[#ececec] font-[family-name:var(--font-playpen-sans)]">
       {/* Content layer: two columns on desktop with comfortable vertical spacing */}
-  <main className="mx-auto grid min-h-dvh max-w-6xl grid-cols-1 gap-6 px-safe py-8 md:grid-cols-2 md:py-12 px-6 md:px-10">
+  <main className="mx-auto grid min-h-dvh max-w-6xl grid-cols-1 gap-5 px-safe py-6 md:grid-cols-2 md:py-10 px-4 md:px-8">
         {/* Left column: RSVP form */}
-  <section className="mx-4 rounded-2xl border-4 border-emerald-900 bg-white p-6 shadow-xl md:mx-0 md:p-8 relative">
+  <section className="mx-4 rounded-2xl border-4 border-emerald-900 bg-white p-5 shadow-xl md:mx-0 md:p-7 relative">
           {/* Navigation buttons in top right corner */}
           <div className="absolute top-4 right-4 flex gap-2">
             <button
@@ -121,32 +121,32 @@ export default function RsvpPage() {
             </button>
           </div>
 
-          <h1 className="mb-4 text-3xl font-bold text-emerald-900">RSVP</h1>
+          <h1 className="mb-3 text-2xl font-bold text-emerald-900">RSVP</h1>
 
-          <form className="flex flex-col gap-5" onSubmit={onSubmit}>
+          <form className="flex flex-col gap-4" onSubmit={onSubmit}>
             {/* Your Name */}
             <div>
-              <label className="mb-2 block font-semibold text-emerald-900">Nama</label>
+              <label className="mb-2 block text-sm font-semibold text-emerald-900">Nama</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder=""
-                className="w-full rounded-xl border border-emerald-900/50 bg-white px-4 py-3 text-base shadow-sm outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700"
+                className="w-full rounded-xl border border-emerald-900/50 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700"
                 required
               />
             </div>
 
             {/* RSVP choice */}
             <div>
-              <label className="mb-2 block font-semibold text-emerald-900">
+              <label className="mb-2 block text-sm font-semibold text-emerald-900">
                 Kami mohon konfirmasi kehadiran Anda pada 28 Maret 2026
               </label>
               <div className="flex flex-col gap-3">
                 <button
                   type="button"
                   onClick={() => setAttendance("will")}
-                  className={`w-full rounded-xl px-4 py-3 text-base shadow-sm transition-colors ${
+                  className={`w-full rounded-xl px-4 py-2.5 text-sm shadow-sm transition-colors ${
                     attendance === "will"
                       ? "bg-emerald-900 text-white"
                       : "bg-gray-200 text-emerald-900 hover:bg-gray-300"
@@ -157,7 +157,7 @@ export default function RsvpPage() {
                 <button
                   type="button"
                   onClick={() => setAttendance("unable")}
-                  className={`w-full rounded-xl px-4 py-3 text-base shadow-sm transition-colors ${
+                  className={`w-full rounded-xl px-4 py-2.5 text-sm shadow-sm transition-colors ${
                     attendance === "unable"
                       ? "bg-emerald-900 text-white"
                       : "bg-gray-200 text-emerald-900 hover:bg-gray-300"
@@ -165,12 +165,38 @@ export default function RsvpPage() {
                 >
                   ❌ Tidak Bisa Hadir
                 </button>
+                <button
+                  type="button"
+                  onClick={() => setAttendance("maybe")}
+                  className={`w-full rounded-xl px-4 py-2.5 text-sm shadow-sm transition-colors ${
+                    attendance === "maybe"
+                      ? "bg-emerald-900 text-white"
+                      : "bg-gray-200 text-emerald-900 hover:bg-gray-300"
+                  }`}
+                >
+                  <span className="inline-flex items-center justify-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="9" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-.7.5-1.2 1-1.2 2" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 17h.01" />
+                    </svg>
+                    Masih Ragu
+                  </span>
+                </button>
               </div>
             </div>
 
             {/* Message */}
             <div>
-              <label className="mb-2 block font-semibold text-emerald-900">
+              <label className="mb-2 block text-sm font-semibold text-emerald-900">
                 ✉️ Bagikan pesan untuk Kami!
               </label>
               <input
@@ -178,7 +204,7 @@ export default function RsvpPage() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder=""
-                className="w-full rounded-xl border border-emerald-900/50 bg-white px-4 py-5 text-base shadow-sm outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700"
+                className="w-full rounded-xl border border-emerald-900/50 bg-white px-4 py-3 text-sm shadow-sm outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700"
               />
             </div>
 
@@ -187,7 +213,7 @@ export default function RsvpPage() {
             {/* Submit */}
             <button
               type="submit"
-              className="mt-1 w-full rounded-full bg-emerald-900 px-6 py-3 text-lg font-semibold text-white shadow-md transition-colors hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-700"
+              className="mt-1 w-full rounded-full bg-emerald-900 px-6 py-2.5 text-base font-semibold text-white shadow-md transition-colors hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-700"
               disabled={!name || !attendance}
             >
               Submit
@@ -196,39 +222,86 @@ export default function RsvpPage() {
         </section>
 
         {/* Right column: stats and RSVP feed */}
-  <section className="mx-4 rounded-2xl border-4 border-emerald-900 bg-white p-6 shadow-xl md:mx-0 md:p-8">
-          <h2 className="mb-4 text-2xl font-bold text-emerald-900">Statistik Kehadiran</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-xl border border-emerald-900/50 bg-emerald-50 p-4 text-center">
-              <div className="text-sm font-semibold text-emerald-900">✅ Akan Hadir</div>
-              <div className="mt-1 text-3xl font-bold text-emerald-900">
+  <section className="mx-4 rounded-2xl border-4 border-emerald-900 bg-white p-5 shadow-xl md:mx-0 md:p-7">
+          <h2 className="mb-3 text-lg font-bold text-emerald-900">Statistik Kehadiran</h2>
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="rounded-xl border border-emerald-900/50 bg-emerald-50 p-2.5 text-center">
+              <div className="text-[11px] font-semibold text-emerald-900">✅ Akan Hadir</div>
+              <div className="mt-1 text-xl font-bold text-emerald-900">
                 {items.filter((i) => i.status === "will").length}
               </div>
             </div>
-            <div className="rounded-xl border border-emerald-900/50 bg-emerald-50 p-4 text-center">
-              <div className="text-sm font-semibold text-emerald-900">❌ Tidak Bisa Hadir</div>
-              <div className="mt-1 text-3xl font-bold text-emerald-900">
+            <div className="rounded-xl border border-emerald-900/50 bg-emerald-50 p-2.5 text-center">
+              <div className="text-[11px] font-semibold text-emerald-900">
+                <span className="inline-flex items-center justify-center gap-1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    className="h-3.5 w-3.5"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="9" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-.7.5-1.2 1-1.2 2" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 17h.01" />
+                  </svg>
+                  Masih Ragu
+                </span>
+              </div>
+              <div className="mt-1 text-xl font-bold text-emerald-900">
+                {items.filter((i) => i.status === "maybe").length}
+              </div>
+            </div>
+            <div className="rounded-xl border border-emerald-900/50 bg-emerald-50 p-2.5 text-center">
+              <div className="text-[11px] font-semibold text-emerald-900">❌ Tidak Bisa Hadir</div>
+              <div className="mt-1 text-xl font-bold text-emerald-900">
                 {items.filter((i) => i.status === "unable").length}
               </div>
             </div>
           </div>
 
-          <h3 className="mt-6 text-xl font-bold text-emerald-900">Feed RSVP</h3>
+          <h3 className="mt-5 text-lg font-bold text-emerald-900">Feed RSVP</h3>
           <div className="mt-3 max-h-[50vh] overflow-y-auto rounded-xl border border-emerald-900/40 bg-white">
             {isLoading ? (
-              <div className="p-4 text-sm text-emerald-900/80 text-center">Memuat...</div>
+              <div className="p-3 text-sm text-emerald-900/80 text-center">Memuat...</div>
             ) : visibleItems.length === 0 ? (
-              <div className="p-4 text-sm text-emerald-900/80">Belum ada RSVP.</div>
+              <div className="p-3 text-sm text-emerald-900/80">Belum ada RSVP.</div>
             ) : (
               <ul className="divide-y divide-emerald-900/20">
                 {visibleItems.map((i) => (
-                  <li key={i.id} className="p-4">
+                  <li key={i.id} className="p-3">
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-emerald-900">{i.name}</span>
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        i.status === "will" ? "bg-emerald-900 text-white" : "bg-gray-200 text-emerald-900"
+                        i.status === "will"
+                          ? "bg-emerald-900 text-white"
+                          : i.status === "maybe"
+                          ? "bg-amber-200 text-emerald-900"
+                          : "bg-gray-200 text-emerald-900"
                       }`}>
-                        {i.status === "will" ? "✅ Akan Hadir" : "❌ Tidak Bisa Hadir"}
+                        {i.status === "will" ? (
+                          "✅"
+                        ) : i.status === "maybe" ? (
+                          <span className="inline-flex items-center gap-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              className="h-4 w-4"
+                              aria-hidden="true"
+                            >
+                              <circle cx="12" cy="12" r="9" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-.7.5-1.2 1-1.2 2" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 17h.01" />
+                            </svg>
+                          </span>
+                        ) : (
+                          "❌"
+                        )}
                       </span>
                     </div>
                     <div className="mt-1 text-sm text-emerald-900/80">{i.message || "-"}</div>
@@ -243,16 +316,16 @@ export default function RsvpPage() {
           <div className="mt-3 flex items-center justify-between">
             <button
               type="button"
-              className="rounded-full bg-emerald-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+              className="rounded-full bg-emerald-900 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
             >
               Prev
             </button>
-            <div className="text-sm text-emerald-900">Halaman {page} / {totalPages}</div>
+            <div className="text-xs text-emerald-900">Halaman {page} / {totalPages}</div>
             <button
               type="button"
-              className="rounded-full bg-emerald-900 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+              className="rounded-full bg-emerald-900 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
             >
